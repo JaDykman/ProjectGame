@@ -4,14 +4,22 @@ const wall = "#";
 const floor = ".";
 const water = "~";
 
+let gameBoard = [];
+
 const table = document.createElement('table');
 
 function tileGeneration() {
+
+    // Initialize the gameBoard with the right dimensions
+    for (let y = 0; y < sizeY; y++) {
+        gameBoard[y] = [];
+    }
+    
     //we can create and build the floor types here    
-    for (let y = 1; y < sizeY - 1; y++) {
+    for (let y = 0; y < sizeY; y++) {
         //Make a new row
         const row = table.insertRow();
-        for (let x = 1; x < sizeX - 1; x++) {
+        for (let x = 0; x < sizeX; x++) {
             // Create cells for 
             const cell = row.insertCell();
             // Edit the cell's content
@@ -26,7 +34,10 @@ function tileGeneration() {
                     cell.textContent = water;
                     break;
             }
+            //print the rows content to the console
+            gameBoard[y][x] = cell.textContent;
         }
     }
-    console.log(table.rows.length);
+    table.style.width = sizeX * 100 + "%";
+    console.log(gameBoard);
 }
