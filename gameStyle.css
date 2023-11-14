@@ -1,6 +1,4 @@
-p {
-    color: whitesmoke;
-}
-body {
-    background-color: white;
+td {
+    text-align: center;
+    line-height: .5;
 }

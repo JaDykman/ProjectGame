@@ -1,5 +1,5 @@
-let sizeY = 75; //The size of the game floor
-let sizeX = 75;
+let sizeY = 100; //The size of the game floor
+let sizeX = 100;
 const wall = "#";
 const floor = ".";
 const water = "~";
@@ -9,37 +9,23 @@ let gameBoard = [];
 let noiseGrid;
 const table = document.createElement('table');
 
-function tileGeneration() {
-  
+function displayMap(map) {
+    table.innerHTML = "";
     //We can create and build the floor types here    
     for (let y = 0; y < sizeY; y++) {
-        gameBoard[y] = []; //Initialize the game board
-        //Make a new row
-        const row = table.insertRow();
+        const row = table.insertRow(); //Make a new row
         for (let x = 0; x < sizeX; x++) {
-            // Create cells for 
-            const cell = row.insertCell();
-            // Edit the cell's content
-            switch (Math.floor(Math.random() * 3)) {
-                case 0:
-                    cell.textContent = floor;
-                    break;
-                case 1:
-                    cell.textContent = wall;
-                    break;
-                case 2:
-                    cell.textContent = water;
-                    break;
-            }
-            //print the rows content to the console
-            gameBoard[y][x] = cell.textContent;
+            const cell = row.insertCell(); //Create cell 
+            
+            cell.textContent = map[y][x]; //Edit the cell's content
         }
     }
-    console.log(gameBoard);
+    document.body.appendChild(table);
 }
 
 function make_noise_map(density) {
     noiseGrid = [];
+    iterations = 0;
     for (let y = 0; y < sizeY; y++) {
         noiseGrid[y] = [];
         for (let x = 0; x < sizeX; x++) {
@@ -74,7 +60,9 @@ function cellular_automation() {
                         let checkY = y + offsetY;
 
                         if (checkX >= 0 && checkX < sizeX && checkY >= 0 && checkY < sizeY && 
-                            (currentMap[checkY][checkX] === wall || currentMap[checkY][checkX] === null)) {
+                            (currentMap[checkY][checkX] !== wall)) {
+                            surroundingWalls = surroundingWalls;
+                        } else {
                             surroundingWalls++;
                         }
                     }
@@ -92,7 +80,11 @@ function cellular_automation() {
 }
 
 
-function displayMap(map) {
+function tileGeneration(map) {
     let mapHtml = map.map(row => row.join(" ")).join("<br>");
     document.getElementById("map").innerHTML = mapHtml;
 }
+
+// Define a function to find room
+// Functions that finds distance between rooms
+// If there is no rooms, return -1
