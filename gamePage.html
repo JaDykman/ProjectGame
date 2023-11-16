@@ -5,13 +5,14 @@
     <title>Game</title>
     <script src="gameCode.js"></script>
     <script src="mapGeneration.js"></script>
+    <script src="player.js"></script>
     <link rel="stylesheet" href="gameStyle.css" />
   </head>
   <body>
+    <button type="button" onclick="makePlayer()">New Player</button>
     <button
       type="button"
-      onclick="make_noise_map(65), cellular_automation(6), defineRooms(), addBorder()"
-    >
+      onclick="make_noise_map(65), cellular_automation(6), defineRooms(), addBorder()">
       Generate Map
     </button>
     <div id="map"></div>
