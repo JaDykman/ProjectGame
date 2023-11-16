@@ -178,15 +178,18 @@ function createDrunkardsWalkCorridor(start, end) {
     }
 }
 function addBorder() {
-    for (let y = 0; y < gameBoard.length; y++) { 
-        for (let x = 0; x < gameBoard[y].length; x++){
-            if (x == 0 || x == sizeX) { 
-                gameBoard[y][x] = wall;
-            }
-            if (y == 0 || x == sizeY) {
-                gameBoard[y][x] = wall;
-            }
-        }
+    // Adding a border at the top and bottom
+    for (let x = 0; x < sizeX; x++) {
+        gameBoard[0][x] = wall; // Top border
+        gameBoard[sizeY - 1][x] = wall; // Bottom border
     }
+
+    // Adding a border on the left and right
+    for (let y = 0; y < sizeY; y++) {
+        gameBoard[y][0] = wall; // Left border
+        gameBoard[y][sizeX - 1] = wall; // Right border
+    }
+    displayMap(gameBoard);
 }
+
 //TODO add floor types.
