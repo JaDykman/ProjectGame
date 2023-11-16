@@ -1,5 +1,5 @@
-let sizeY = 50; //The size of the game floor
-let sizeX = 50;
+let sizeY = 75; //The size of the game floor
+let sizeX = 75;
 const wall = "#";
 const floor = "";
 const water = "~";
@@ -119,7 +119,6 @@ function performFloodFill(gameBoard, startX, startY, visited) {
 
     return room;
 }
-
 function createDoor() {
     let randomRoomIndex = Math.floor(Math.random() * rooms.length);
     let room = rooms[randomRoomIndex];
@@ -136,15 +135,23 @@ function createDoor() {
     gameBoard[y][x] = door;
     displayMap(gameBoard);
 }
-
 function connectRooms() {
+    rooms.sort((a, b) => {
+    if (a.x < b.x) {
+        return -1;
+    } else if (a.x > b.x) {
+        return 1;
+    } else {
+        return 0;
+    }
+    });
     for (let i = 0; i < rooms.length - 1; i++) {
         const start = getCenter(rooms[i]);
         const end = getCenter(rooms[i + 1]);
-        createDrunkardsWalkCorridor(start, end);       
+
+        createDrunkardsWalkCorridor(start, end);
     }
 }
-
 function getCenter(room) {
     // Calculate the center of a room
     // Assuming room is an array of [x, y] pairs
@@ -158,17 +165,28 @@ function getCenter(room) {
 function createDrunkardsWalkCorridor(start, end) {
     let [x, y] = start;
     while (x !== end[0] || y !== end[1]) {
-        gameBoard[y][x] = floor; // Mark the current cell as part of the corridor
-
+        gameBoard[y][x] = ""; // Mark the current cell as part of the corridor
         // Randomly decide whether to move in x or y direction
+
         if (Math.random() < 0.5) {
             // Move in x direction
-            x += (x < end[0]) ? 1 : -1;
+            x += (x <= end[0]) ? 1 : -1;
         } else {
             // Move in y direction
-            y += (y < end[1]) ? 1 : -1;
+            y += (y <= end[1]) ? 1 : -1;
         }
     }
 }
-
+function addBorder() {
+    for (let y = 0; y < gameBoard.length; y++) { 
+        for (let x = 0; x < gameBoard[y].length; x++){
+            if (x == 0 || x == sizeX) { 
+                gameBoard[y][x] = wall;
+            }
+            if (y == 0 || x == sizeY) {
+                gameBoard[y][x] = wall;
+            }
+        }
+    }
+}
 //TODO add floor types.
