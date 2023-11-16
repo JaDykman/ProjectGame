@@ -1,14 +1,14 @@
-let sizeY = 75; //The size of the game floor
-let sizeX = 75;
+let sizeY = 50; //The size of the game floor
+let sizeX = 50;
 const wall = "#";
-const floor = " ";
+const floor = "";
 const water = "~";
 const door = "@";
 
 let gameBoard = [];
 let rooms = [];
 let noiseGrid;
-let doorPosition;
+let doorPosition = [];
 const table = document.createElement('table');
 
 function displayMap(map) {
@@ -93,6 +93,7 @@ function defineRooms() {
         }
     }
     console.log(rooms);
+    connectRooms();
     createDoor();
     return rooms;
 }
@@ -133,8 +134,41 @@ function createDoor() {
 
     // Place a door at this random cell
     gameBoard[y][x] = door;
-    doorPosition = [x, y];
     displayMap(gameBoard);
 }
 
+function connectRooms() {
+    for (let i = 0; i < rooms.length - 1; i++) {
+        const start = getCenter(rooms[i]);
+        const end = getCenter(rooms[i + 1]);
+        createDrunkardsWalkCorridor(start, end);       
+    }
+}
 
+function getCenter(room) {
+    // Calculate the center of a room
+    // Assuming room is an array of [x, y] pairs
+    let sumX = 0, sumY = 0;
+    for (const [x, y] of room) {
+        sumX += x;
+        sumY += y;
+    }
+    return [Math.floor(sumX / room.length), Math.floor(sumY / room.length)];
+}
+function createDrunkardsWalkCorridor(start, end) {
+    let [x, y] = start;
+    while (x !== end[0] || y !== end[1]) {
+        gameBoard[y][x] = floor; // Mark the current cell as part of the corridor
+
+        // Randomly decide whether to move in x or y direction
+        if (Math.random() < 0.5) {
+            // Move in x direction
+            x += (x < end[0]) ? 1 : -1;
+        } else {
+            // Move in y direction
+            y += (y < end[1]) ? 1 : -1;
+        }
+    }
+}
+
+//TODO add floor types.

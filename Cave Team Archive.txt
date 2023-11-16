@@ -3,3 +3,5 @@ Max - I set up each file in the folder and helped to get groups organized
 
 Week 2:
 Jacob - I created the functions that draw a game board.
+Jacob - I created the functions that finds and declares rooms.
+Jacob - I created the functions places the door.
