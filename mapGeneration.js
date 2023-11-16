@@ -11,6 +11,13 @@ let noiseGrid;
 let doorPosition = [];
 const table = document.createElement('table');
 
+function createGameBoard() { 
+    make_noise_map(65);
+    cellular_automation(6);
+    defineRooms();
+    addBorder();
+}
+
 function displayMap(map) {
     table.innerHTML = "";
     //We can create and build the floor types here    
@@ -92,7 +99,6 @@ function defineRooms() {
             }
         }
     }
-    console.log(rooms);
     connectRooms();
     createDoor();
     return rooms;
