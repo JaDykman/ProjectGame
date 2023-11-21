@@ -1,19 +1,38 @@
-let sizeY = 75; //The size of the game floor
-let sizeX = 75;
+
+//The size of the game floor
+let sizeY = 50; 
+let sizeX = 100;
+
 const wall = "#";
 const floor = "";
 const water = "~";
 const door = "@";
 
-let gameBoard = [];
-let rooms = [];
+////////////////////////////////////
+// Variables created when the createGameBoard() function is called
+let gameBoard = []; // This is the entire game board
+let rooms = []; // This is a list of all the rooms in the game
+let doorPosition = []; // Positions of the doors/staircases in the game
+
 let noiseGrid;
-let doorPosition = [];
-const table = document.createElement('table');
+////////////////////////////////////
+
+function createGameBoard() { 
+    make_noise_map(65); //Create the noise map. The number represents the density (%) of walls.
+    cellular_automation(6); // Create the cellular automaton. The number represents the iterations of the cellular automaton.
+    defineRooms(); // Find and define the rooms.
+    addBorder(); // Add a border around the the entire board.
+    displayMap(gameBoard); // Display the game board.
+    for (let roomKey in rooms) { // Place a sheep in the center of each room
+        let room = rooms[roomKey];
+        let center = getCenter(room);
+        addEnemy('sheep', center[0], center[1]);
+    }
+}
 
 function displayMap(map) {
-    table.innerHTML = "";
-    //We can create and build the floor types here    
+    const table = document.getElementById('gameBoard'); // Get the table element
+    table.innerHTML = ""; // Clear the table
     for (let y = 0; y < sizeY; y++) {
         const row = table.insertRow(); //Make a new row
         for (let x = 0; x < sizeX; x++) {
@@ -24,13 +43,12 @@ function displayMap(map) {
     document.body.appendChild(table);
 }
 function make_noise_map(density) {
-    noiseGrid = [];
-    rooms = [];
-    iterations = 0;
+    noiseGrid = []; // Clear/Create the noise grid
+    rooms = []; // Clear the list of rooms
     for (let y = 0; y < sizeY; y++) {
         noiseGrid[y] = [];
         for (let x = 0; x < sizeX; x++) {
-            let random = Math.random()*100 + 1;
+            let random = Math.random()*100 + 1; 
             if (random > density) {
                 noiseGrid[y][x] = floor;
             }
@@ -39,12 +57,12 @@ function make_noise_map(density) {
             }
         }
     }
-    displayMap(noiseGrid);
     cellular_automation(5);
     return noiseGrid;
 }
 function cellular_automation(iterations) {
-    let currentMap = noiseGrid;
+    // Every iteration of the cellular automaton makes the game board smoother.
+    let currentMap = noiseGrid; // Create a copy of the currentMap aka the game board
     iterations++;
     for (let iter = 0; iter < iterations; iter++) {
         let newGrid = Array.from(Array(sizeY), () => new Array(sizeX));
@@ -69,14 +87,13 @@ function cellular_automation(iterations) {
                     }
                 }
 
-                newGrid[y][x] = surroundingWalls > 4 ? wall : floor;
+                newGrid[y][x] = surroundingWalls > 4 ? wall : floor; // If it has more than 4 surrounding walls, set the cell to a wall
             }
         }
 
         currentMap = newGrid;
     }
 
-    displayMap(currentMap); // Ensure this function is defined elsewhere
     gameBoard = currentMap;
     return currentMap;
 }
@@ -92,8 +109,7 @@ function defineRooms() {
             }
         }
     }
-    console.log(rooms);
-    connectRooms();
+    connectRooms(); 
     createDoor();
     return rooms;
 }
@@ -123,7 +139,7 @@ function createDoor() {
     let randomRoomIndex = Math.floor(Math.random() * rooms.length);
     let room = rooms[randomRoomIndex];
 
-    while (room.length < 20) {
+    while (room.length < 20) { // If the room is too small, create a new one
         randomRoomIndex = Math.floor(Math.random() * rooms.length); // Reassign a new random index
         room = rooms[randomRoomIndex]; // Update the room
     }
@@ -133,7 +149,6 @@ function createDoor() {
 
     // Place a door at this random cell
     gameBoard[y][x] = door;
-    displayMap(gameBoard);
 }
 function connectRooms() {
     rooms.sort((a, b) => {
@@ -163,11 +178,12 @@ function getCenter(room) {
     return [Math.floor(sumX / room.length), Math.floor(sumY / room.length)];
 }
 function createDrunkardsWalkCorridor(start, end) {
+    // Create a drunkards walk corridor between two rooms
+    // Assuming start and end are arrays of [x, y] pairs
     let [x, y] = start;
     while (x !== end[0] || y !== end[1]) {
         gameBoard[y][x] = ""; // Mark the current cell as part of the corridor
         // Randomly decide whether to move in x or y direction
-
         if (Math.random() < 0.5) {
             // Move in x direction
             x += (x <= end[0]) ? 1 : -1;
@@ -178,15 +194,17 @@ function createDrunkardsWalkCorridor(start, end) {
     }
 }
 function addBorder() {
-    for (let y = 0; y < gameBoard.length; y++) { 
-        for (let x = 0; x < gameBoard[y].length; x++){
-            if (x == 0 || x == sizeX) { 
-                gameBoard[y][x] = wall;
-            }
-            if (y == 0 || x == sizeY) {
-                gameBoard[y][x] = wall;
-            }
-        }
+    // Adding a border at the top and bottom
+    for (let x = 0; x < sizeX; x++) {
+        gameBoard[0][x] = wall; // Top border
+        gameBoard[sizeY - 1][x] = wall; // Bottom border
+    }
+
+    // Adding a border on the left and right
+    for (let y = 0; y < sizeY; y++) {
+        gameBoard[y][0] = wall; // Left border
+        gameBoard[y][sizeX - 1] = wall; // Right border
     }
 }
+
 //TODO add floor types.
