@@ -6,12 +6,13 @@
     <script src="gameCode.js"></script>
     <script src="mapGeneration.js"></script>
     <script src="NPCScript.js"></script>
+    <script src="player.js"></script>
     <link rel="stylesheet" href="gameStyle.css" />
-    
   </head>
+  
   <body onload="createGameBoard()">
     <button type="button" onclick="createGameBoard()">Generate New Map</button>
     <button type="button" onclick="roamAll()">Roam All</button>
-    <table id="gameBoard"></table>
+    <button type="button" onclick="makePlayer()">New Player</button>
   </body>
 </html>
