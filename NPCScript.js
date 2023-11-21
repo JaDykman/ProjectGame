@@ -43,6 +43,8 @@ function addEnemy(type, posX, posY) {
     // Draw the new NPC on the game board by fetching the table and calling the draw method
     let table = document.getElementById('gameBoard');
     newNPC.draw(table);
+
+    return newNPC;
 }
 
 // NPC class to create enemy NPC instances
@@ -75,4 +77,42 @@ class NPC {
         const cell = table.rows[this.posY].cells[this.posX];
         cell.innerHTML = `<img src="${this.sprite}" alt="NPC">`; // Set the inner HTML to an image tag with the sprite
     }
+    roam(gameBoard) {
+        // Randomly determine movement direction: -1 (left/up), 0 (stay), or 1 (right/down)
+        let moveX = Math.floor(Math.random() * 3) - 1; // Will give -1, 0, or 1
+        let moveY = Math.floor(Math.random() * 3) - 1; // Will give -1, 0, or 1
+    
+        let newX = this.posX + moveX;
+        let newY = this.posY + moveY;
+    
+        // Boundary checks for the game board
+        if (newX < 0 || newY < 0 || newY >= gameBoard.length || newX >= gameBoard[0].length) {
+            // Out of bounds, so don't move
+            return;
+        }
+    
+        // Check if the new position is walkable (i.e., is a floor)
+        if (gameBoard[newY][newX] === floor) {
+            // Update the game state array for the old position
+            gameBoard[this.posY][this.posX] = floor;
+    
+            // Update the game state array for the new position
+            gameBoard[newY][newX] = this.id; // Store the NPC's ID or a unique identifier
+    
+            // Update the DOM
+            let table = document.getElementById('gameBoard');
+            const oldCell = table.rows[this.posY].cells[this.posX];
+            oldCell.innerHTML = ''; // Clear the old position
+    
+            const newCell = table.rows[newY].cells[newX];
+            newCell.innerHTML = `<img src="${this.sprite}" alt="NPC">`; // Set the new position
+    
+            // Update the NPC's position properties
+            this.posX = newX;
+            this.posY = newY;
+        }
+    }
+    
+    
+    
 }
