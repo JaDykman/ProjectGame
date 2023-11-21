@@ -1,38 +1,46 @@
 const swordOne = {
         name: "Stick",
-        image:"sword.png",
+        image:"texture_sword.png",
         damage: 10,
     };
     const swordTwo = {
         name: "Fishsword",
+        image:"texture_fishsword.png",
         damage: 25,
     };
     const swordThree = {
         name: "Megasword",
+        image:"texture_megasword.png",
         damage: 50,
     };
     const bowOne = {
         name: "bow1",
+        image: "",
         damage: 10,
     };
     const bowTwo = {
         name: "bow2",
+        image: "",
         damage: 25,
     };
     const bowThree = {
         name: "bow3",
+        image: "",
         damage: 50,
     };
     const armourOne = {
         name: "Cardboard Armour",
+        image: "",
         extraHealth: 50,
     };
     const armourTwo = {
         name: "Iron Armour",
+        image: "",
         extraHealth: 75,
     };
     const armourThree = {
         name: "Titanium Armour",
+        image: "",
         extraHealth:100,
     };
  
@@ -60,7 +68,7 @@ this.displayInventory = function(){
             console.log('${item.name}: {$item.description}');
         });
     }
-    }
+}
  
 }
  
@@ -73,14 +81,74 @@ function displayInventory(){
 }
 }
  
-const stickSword = document.createElement("img");
-img.src = "MicrosoftTeams-image (1).png";
-document.body.appendChild(img);
+{
+    let inventory = [swordTwo];
+    for (let i=0;i<inventory.length; i++) {
+        let img = document.createElement('img');
+        img.src = i.image;
+        document.body.appendChild(img);
+}
+}
  
-const fishSword = document.createElement("img");
-fishSword.src = "MicrosoftTeams-image.png";
-document.body.appendChild(fishSword);
- 
-const megaSword = document.createElement("img");
-megaSword.src = "MicrosoftTeams-image (2).png";
-document.body.appendChild(megaSword);
+{
+    let inventory = [swordThree];
+    for (let i=0;i<inventory.length; i++) {
+        let img = document.createElement('img');
+        img.src = i.image;
+        document.body.appendChild(img);
+}
+} 
+
+{
+    let inventory = [bowOne];
+    for (let i=0;i<inventory.length; i++) {
+        let img = document.createElement('img');
+        img.src = i.image;
+        document.body.appendChild(img);
+}
+} 
+
+{
+    let inventory = [bowTwo];
+    for (let i=0;i<inventory.length; i++) {
+        let img = document.createElement('img');
+        img.src = i.image;
+        document.body.appendChild(img);
+}
+} 
+
+{
+    let inventory = [bowThree];
+    for (let i=0;i<inventory.length; i++) {
+        let img = document.createElement('img');
+        img.src = i.image;
+        document.body.appendChild(img);
+}
+} 
+
+{
+    let inventory = [armourOne];
+    for (let i=0;i<inventory.length; i++) {
+        let img = document.createElement('img');
+        img.src = i.image;
+        document.body.appendChild(img);
+}
+} 
+
+{
+    let inventory = [armourTwo];
+    for (let i=0;i<inventory.length; i++) {
+        let img = document.createElement('img');
+        img.src = i.image;
+        document.body.appendChild(img);
+}
+} 
+
+{
+    let inventory = [armourThree];
+    for (let i=0;i<inventory.length; i++) {
+        let img = document.createElement('img');
+        img.src = i.image;
+        document.body.appendChild(img);
+}
+} 

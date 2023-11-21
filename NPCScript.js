@@ -1,7 +1,7 @@
 // Enumerator object to define the types of enemies and their properties
 const Enumerator  = {
     sheep: {
-        health: 1, 
+        health:     1, 
         damage: 0, 
         sprite: 'sheep.png' // Path to the image used for the sheep NPC
     },

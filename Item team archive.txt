@@ -1,0 +1,7 @@
+Item team: Felix and Ville.
+
+Week 1: Made a list of items we wanted to create.
+
+Week 2: Wrote them as objects and gave them properties.¨
+
+Week 3: Started creation of inventory.

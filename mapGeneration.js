@@ -22,6 +22,7 @@ function createGameBoard() {
     cellular_automation(6); // Create the cellular automaton. The number represents the iterations of the cellular automaton.
     defineRooms(); // Find and define the rooms.
     addBorder(); // Add a border around the the entire board.
+    placePlayer(); // Place the player 
     displayMap(gameBoard); // Display the game board.
     for (let roomKey in rooms) { // Place a sheep in the center of each room
         let room = rooms[roomKey];
@@ -44,7 +45,12 @@ function roamAll(){
     }
     displayMap(gameBoard);
 }
-
+function placePlayer() {
+    let randomRoomIndex = Math.floor(Math.random() * rooms.length);
+    let x = rooms[randomRoomIndex].getCenter();
+    const cell = table.rows[x.x].cells[x.y];
+    cell.innerHTML = '&'; // Set the inner HTML to an image tag with the sprite
+}
 function displayMap(map) {
     let table = document.getElementById('gameBoard');
     table.innerHTML = ""; // Clear the table

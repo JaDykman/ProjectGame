@@ -1,2 +1,4 @@
 Week 3
 Max - I've created a function that allows you to create a character
+Week 4
+Max - I've built the movement system out of what was found in the NPCScript.js
