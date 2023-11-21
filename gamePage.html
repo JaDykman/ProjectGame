@@ -7,9 +7,11 @@
     <script src="mapGeneration.js"></script>
     <script src="NPCScript.js"></script>
     <link rel="stylesheet" href="gameStyle.css" />
+    
   </head>
-  <body>
-    <button type="button" onclick="createGameBoard()">Generate Map</button>
+  <body onload="createGameBoard()">
+    <button type="button" onclick="createGameBoard()">Generate New Map</button>
+    <button type="button" onclick="roamAll()">Roam All</button>
     <table id="gameBoard"></table>
   </body>
 </html>

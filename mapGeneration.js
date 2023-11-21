@@ -13,7 +13,7 @@ const door = "@";
 let gameBoard = []; // This is the entire game board
 let rooms = []; // This is a list of all the rooms in the game
 let doorPosition = []; // Positions of the doors/staircases in the game
-
+let npcs = [];
 let noiseGrid;
 ////////////////////////////////////
 
@@ -26,20 +26,47 @@ function createGameBoard() {
     for (let roomKey in rooms) { // Place a sheep in the center of each room
         let room = rooms[roomKey];
         let center = getCenter(room);
-        addEnemy('sheep', center[0], center[1]);
+        if(center != doorPosition){ //Make sure we aren't spawning an entity on top of the door
+            let newEnemy = new addEnemy('sheep', center[0], center[1]); 
+            npcs.push(newEnemy);
+        }
     }
+}
+function roamAll(){
+    for(let i = 0; i < npcs.length; i++){
+        let npc = npcs[i];
+        console.log(npc); // Check the structure of the NPC object
+        if(typeof npc.roam === 'function'){
+            npc.roam(gameBoard);
+        } else {
+            console.error("roam method not found for NPC:", npc);
+        }
+    }
+    displayMap(gameBoard);
 }
 
 function displayMap(map) {
-    const table = document.getElementById('gameBoard'); // Get the table element
+    let table = document.getElementById('gameBoard');
     table.innerHTML = ""; // Clear the table
+
     for (let y = 0; y < sizeY; y++) {
-        const row = table.insertRow(); //Make a new row
+        const row = table.insertRow();
         for (let x = 0; x < sizeX; x++) {
-            const cell = row.insertCell(); //Create cell 
-            cell.textContent = map[y][x];
+            const cell = row.insertCell();
+            
+            // Check if the cell contains an NPC ID
+            if (typeof map[y][x] === 'number') {
+                let npc = allEnemies.find(npc => npc.id === map[y][x]);
+                if (npc) {
+                    cell.innerHTML = `<img src="${npc.sprite}" alt="NPC">`;
+                }
+            } else {
+                // For non-NPC cells, use textContent as before
+                cell.textContent = map[y][x];
+            }
         }
     }
+
     document.body.appendChild(table);
 }
 function make_noise_map(density) {
@@ -208,3 +235,13 @@ function addBorder() {
 }
 
 //TODO add floor types.
+
+const interval = 2000; // 2 seconds
+
+const intervalId = setInterval(function() {
+    // Call NPC movement logic here
+    roamAll(); // Assuming this function moves all NPCs
+
+    // Then update the display
+    displayMap(gameBoard);
+}, interval);

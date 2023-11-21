@@ -8,7 +8,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Open",
-            "file": "c:\\Users\\jacob\\OneDrive\\Documents\\GitHub\\ProjectGame\\gamePage.html"
+            "file": "gamePage.html"
             
         }
     ]
