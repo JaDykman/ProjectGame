@@ -37,11 +37,6 @@ function createGameBoard() {
     }
     //displayMap(gameBoard); // Display the game board.
 }
-function playerTurn() { 
-    moveAll();
-    setAllNextMove();
-    displayMap(gameBoard);
-}
 function moveAll(){
     for(let npc of npcs){
         npc.moveNext(gameBoard);
@@ -57,7 +52,7 @@ function placePlayer() {
     let room = rooms[randomRoomIndex]
     let center = getCenter(room);
     table = document.getElementById('gameBoard');
-    gameBoard[center[1]][center[0]] = player._sprite; // Store the player's ID
+    gameBoard[center[1]][center[0]] = player.sprite; // Store the player's ID
     player.posX = center[0];
     player.posY = center[1];
 }
@@ -76,6 +71,7 @@ function displayMap(map) {
                 if (npc) {
                     cell.innerHTML = `<img src="${npc.sprite}" alt="NPC">`;
                 }
+                
             } else {
                 // For non-NPC cells, use textContent as before
                 cell.textContent = map[y][x];
