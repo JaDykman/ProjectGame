@@ -7,6 +7,7 @@ const wall = "#";
 const floor = "";
 const water = "~";
 const door = "@";
+let player;
 
 ////////////////////////////////////
 // Variables created when the createGameBoard() function is called
@@ -15,9 +16,11 @@ let rooms = []; // This is a list of all the rooms in the game
 let doorPosition = []; // Positions of the doors/staircases in the game
 let npcs = [];
 let noiseGrid;
+let table;
 ////////////////////////////////////
 
 function createGameBoard() { 
+    player = makePlayer();
     make_noise_map(65); //Create the noise map. The number represents the density (%) of walls.
     cellular_automation(6); // Create the cellular automaton. The number represents the iterations of the cellular automaton.
     defineRooms(); // Find and define the rooms.
@@ -27,32 +30,39 @@ function createGameBoard() {
     for (let roomKey in rooms) { // Place a sheep in the center of each room
         let room = rooms[roomKey];
         let center = getCenter(room);
-        if(center != doorPosition){ //Make sure we aren't spawning an entity on top of the door
-            let newEnemy = new addEnemy('sheep', center[0], center[1]); 
+        if(center != doorPosition && center[0] != player.posX && center[1] != player.y){ //Make sure we aren't spawning an entity on top of the door
+            let newEnemy = new AddNPC('sheep', center[0], center[1]); 
             npcs.push(newEnemy);
         }
     }
+    //displayMap(gameBoard); // Display the game board.
 }
-function roamAll(){
-    for(let i = 0; i < npcs.length; i++){
-        let npc = npcs[i];
-        console.log(npc); // Check the structure of the NPC object
-        if(typeof npc.roam === 'function'){
-            npc.roam(gameBoard);
-        } else {
-            console.error("roam method not found for NPC:", npc);
-        }
-    }
+function playerTurn() { 
+    moveAll();
+    setAllNextMove();
     displayMap(gameBoard);
+}
+function moveAll(){
+    for(let npc of npcs){
+        npc.moveNext(gameBoard);
+    }
+}
+function setAllNextMove() {
+    for(let npc of npcs){
+        npc.setNextMove(gameBoard);
+    }
 }
 function placePlayer() {
     let randomRoomIndex = Math.floor(Math.random() * rooms.length);
-    let x = rooms[randomRoomIndex].getCenter();
-    const cell = table.rows[x.x].cells[x.y];
-    cell.innerHTML = '&'; // Set the inner HTML to an image tag with the sprite
+    let room = rooms[randomRoomIndex]
+    let center = getCenter(room);
+    table = document.getElementById('gameBoard');
+    gameBoard[center[1]][center[0]] = player._sprite; // Store the player's ID
+    player.posX = center[0];
+    player.posY = center[1];
 }
 function displayMap(map) {
-    let table = document.getElementById('gameBoard');
+    table = document.getElementById('gameBoard');
     table.innerHTML = ""; // Clear the table
 
     for (let y = 0; y < sizeY; y++) {
@@ -113,7 +123,7 @@ function cellular_automation(iterations) {
 
                         if (checkX >= 0 && checkX < sizeX && checkY >= 0 && checkY < sizeY && 
                             (currentMap[checkY][checkX] !== wall)) {
-                            surroundingWalls = surroundingWalls;
+                            continue;
                         } else {
                             surroundingWalls++;
                         }
@@ -239,15 +249,3 @@ function addBorder() {
         gameBoard[y][sizeX - 1] = wall; // Right border
     }
 }
-
-//TODO add floor types.
-
-const interval = 2000; // 2 seconds
-
-const intervalId = setInterval(function() {
-    // Call NPC movement logic here
-    roamAll(); // Assuming this function moves all NPCs
-
-    // Then update the display
-    displayMap(gameBoard);
-}, interval);

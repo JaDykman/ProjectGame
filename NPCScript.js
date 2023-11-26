@@ -1,7 +1,7 @@
 // Enumerator object to define the types of enemies and their properties
 const Enumerator  = {
     sheep: {
-        health:     1, 
+        health: 1, 
         damage: 0, 
         sprite: 'sheep.png' // Path to the image used for the sheep NPC
     },
@@ -17,10 +17,7 @@ let allEnemies = [];
  * @param {number} posX - The x-coordinate where the enemy will be placed.
  * @param {number} posY - The y-coordinate where the enemy will be placed.
  */
-function addEnemy(type, posX, posY) {
-    // Log the action for debugging purposes
-    console.log("Adding enemy. Type:", type, "posX:", posX, "posY:", posY);
-
+function AddNPC(type, posX, posY) {
     // Check if the provided type exists in the Enumerator
     if (!Enumerator[type]) {
         console.error(`Enemy type ${type} not found in Enumerator.`);
@@ -46,7 +43,6 @@ function addEnemy(type, posX, posY) {
 
     return newNPC;
 }
-
 // NPC class to create enemy NPC instances
 class NPC {
     // Constructor to initialize an NPC with provided properties
@@ -57,6 +53,8 @@ class NPC {
         this.sprite = sprite;// Image source for the NPC sprite
         this.posX = posX;    // X-coordinate position on the game board
         this.posY = posY;    // Y-coordinate position on the game board
+        this.nextX = posX;    // Next X-coordinate position on the game board
+        this.nextY = posY;    // Next Y-coordinate position on the game board
     }
 
     // Method to draw the NPC on the game board
@@ -75,43 +73,60 @@ class NPC {
 
         // Retrieve the cell at the NPC's position and insert the NPC sprite as an image
         const cell = table.rows[this.posY].cells[this.posX];
-        cell.innerHTML = `<img src="${this.sprite}" alt="NPC">`; // Set the inner HTML to an image tag with the sprite
+       
+        cell.innerHTML = `<img src="${this.sprite}" alt="NPC">`;
     }
-    roam(gameBoard) {
-        // Randomly determine movement direction: -1 (left/up), 0 (stay), or 1 (right/down)
-        let moveX = Math.floor(Math.random() * 3) - 1; // Will give -1, 0, or 1
-        let moveY = Math.floor(Math.random() * 3) - 1; // Will give -1, 0, or 1
-    
-        let newX = this.posX + moveX;
-        let newY = this.posY + moveY;
-    
-        // Boundary checks for the game board
-        if (newX < 0 || newY < 0 || newY >= gameBoard.length || newX >= gameBoard[0].length) {
-            // Out of bounds, so don't move
-            return;
-        }
-    
-        // Check if the new position is walkable (i.e., is a floor)
-        if (gameBoard[newY][newX] === floor) {
-            // Update the game state array for the old position
-            gameBoard[this.posY][this.posX] = floor;
-    
-            // Update the game state array for the new position
-            gameBoard[newY][newX] = this.id; // Store the NPC's ID or a unique identifier
-    
-            // Update the DOM
-            let table = document.getElementById('gameBoard');
-            const oldCell = table.rows[this.posY].cells[this.posX];
-            oldCell.innerHTML = ''; // Clear the old position
-    
-            const newCell = table.rows[newY].cells[newX];
-            newCell.innerHTML = `<img src="${this.sprite}" alt="NPC">`; // Set the new position
-    
-            // Update the NPC's position properties
-            this.posX = newX;
-            this.posY = newY;
+    setNextMove(gameBoard) {
+        let moveable = false;
+        while (!moveable) {
+            // Randomly determine movement direction: -1 (left/up), 0 (stay), or 1 (right/down)
+            let moveX = Math.floor(Math.random() * 3) - 1; // Will give -1, 0, or 1
+            let moveY = Math.floor(Math.random() * 3) - 1; // Will give -1, 0, or 1
+
+            let newX = this.posX + moveX;
+            let newY = this.posY + moveY;
+
+            // Boundary checks for the game board
+            // if (newX < 0 || newY < 0 || newY >= gameBoard[0].length || newX >= gameBoard[0].length) {
+            //     // Out of bounds, so don't move
+            //     return;
+            // }
+
+            // Check if the new position is walkable (i.e., is a floor)
+            if (gameBoard[newY][newX] === floor) {
+                this.nextX = newX;
+                this.nextY = newY;
+                moveable = true;
+            }
+            else {
+                continue;
+            }
         }
     }
+    moveNext(gameBoard) {
+    // Update the game state array for the old position
+    gameBoard[this.posY][this.posX] = floor;
+
+    // Check if the new position is within the bounds of the game board
+    if (this.nextY >= 0 && this.nextY < gameBoard.length && this.nextX >= 0 && this.nextX < gameBoard[this.nextY].length) {
+        // Update the game state array for the new position
+        gameBoard[this.nextY][this.nextX] = this.id;
+
+        // Update the DOM
+        let table = document.getElementById('gameBoard');
+        const oldCell = table.rows[this.posY].cells[this.posX];
+        oldCell.innerHTML = ''; // Clear the old position
+
+        const newCell = table.rows[this.nextY].cells[this.nextX];
+        newCell.innerHTML = `<img src="${this.sprite}" alt="NPC">`;
+
+        // Update the NPC's position properties
+        this.posX = this.nextX;
+        this.posY = this.nextY;
+    } else {
+        console.error("Invalid next position:", this.nextX, this.nextY);
+    }
+}
     
     
     
