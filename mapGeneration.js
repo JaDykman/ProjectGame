@@ -2,7 +2,9 @@
 //The size of the game floor
 let sizeY = 50; 
 let sizeX = 100;
-
+//Create a canvas element
+let canvas;
+let ctx;
 const wall = "#";
 const floor = "";
 const water = "~";
@@ -16,7 +18,7 @@ let rooms = []; // This is a list of all the rooms in the game
 let doorPosition = []; // Positions of the doors/staircases in the game
 let npcs = [];
 let noiseGrid;
-let table;
+let table = document.getElementById('gameBoard');
 ////////////////////////////////////
 
 function createGameBoard() { 
@@ -37,6 +39,10 @@ function createGameBoard() {
         }
     }
     //displayMap(gameBoard); // Display the game board.
+    canvas = document.getElementById("canvas");
+    canvas.width = sizeX * 15;
+    canvas.height = sizeY * 15;
+    ctx = canvas.getContext("2d");
 }
 function moveAll(){
     for(let npc of npcs){
@@ -65,15 +71,19 @@ function displayMap(map) {
         const row = table.insertRow();
         for (let x = 0; x < sizeX; x++) {
             const cell = row.insertCell();
-            
+            cell.style.color = '';
             // Check if the cell contains an NPC ID
             if (typeof map[y][x] === 'number') {
                 let npc = allEnemies.find(npc => npc.id === map[y][x]);
                 if (npc) {
                     cell.innerHTML = `<img src="${npc.sprite}" alt="NPC">`;
                 }
-                
-            } else {
+            }
+            else if (map[y][x] == player.sprite) {
+                cell.innerHTML = player.sprite;
+                cell.style.color = 'red';
+            }
+            else {
                 // For non-NPC cells, use textContent as before
                 cell.textContent = map[y][x];
             }
@@ -246,3 +256,51 @@ function addBorder() {
         gameBoard[y][sizeX - 1] = wall; // Right border
     }
 }
+function drawLine(x1, y1, x2, y2, color, lineWidth = 1) {
+    ctx.save(); // Save the current state
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth; // Set the line width
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    ctx.restore(); // Restore the original state
+}
+// Function to draw a line from a table cell to a point on the canvas
+function drawLineFromCell(posX, posY, endX, endY, color, lineWidth) {
+    let startPos = getCellScreenPosition(posX, posY);
+    let endPos = getCellScreenPosition(endX, endY);
+
+    // Adjust start position relative to the canvas if needed
+    let canvasRect = canvas.getBoundingClientRect();
+    startPos.x -= canvasRect.left + window.scrollX;
+    startPos.y -= canvasRect.top + window.scrollY;
+    endPos.x -= canvasRect.left + window.scrollX;
+    endPos.y -= canvasRect.top + window.scrollY;
+
+    drawLine(startPos.x, startPos.y, endPos.x, endPos.y, color, lineWidth);
+}
+function getCellScreenPosition(posX, posY) {
+    let table = document.getElementById('gameBoard');
+    if (!table) return null;
+
+    let row = table.rows[posY];
+    if (!row) return null;
+
+    let cell = row.cells[posX];
+    if (!cell) return null;
+
+    let rect = cell.getBoundingClientRect();
+
+    // Calculate the center of the cell
+    let centerX = rect.left + rect.width / 2 + window.scrollX;
+    let centerY = rect.top + rect.height / 2 + window.scrollY;
+
+    return {
+        x: centerX,
+        y: centerY
+    };
+}
+

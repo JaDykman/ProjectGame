@@ -1,5 +1,12 @@
+.canvas-container {
+    position: relative;
+    
+}
+
 table#gameBoard {
     border-collapse: collapse;
+    position: relative;
+    z-index: 1;
 }
 
 table#gameBoard td {
@@ -17,4 +24,11 @@ table#gameBoard td img {
     height: 100%;
     object-fit: contain;
     display: block;
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
 }

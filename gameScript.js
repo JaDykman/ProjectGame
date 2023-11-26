@@ -27,6 +27,8 @@ window.addEventListener("keydown", function (event) {
 }, true);
     
 function playerTurn(x, y) { 
+    //Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     movePlayer(x,y);
     moveAll();
     setAllNextMove();

@@ -78,31 +78,30 @@ class NPC {
     }
     setNextMove(gameBoard) {
         let moveable = false;
-        while (!moveable) {
-            // Randomly determine movement direction: -1 (left/up), 0 (stay), or 1 (right/down)
+        let attempts = 0;
+        const maxAttempts = 10; // Maximum number of attempts to find a new position
+
+        while (!moveable && attempts < maxAttempts) {
             let moveX = Math.floor(Math.random() * 3) - 1; // Will give -1, 0, or 1
             let moveY = Math.floor(Math.random() * 3) - 1; // Will give -1, 0, or 1
 
             let newX = this.posX + moveX;
             let newY = this.posY + moveY;
 
-            // Boundary checks for the game board
-            // if (newX < 0 || newY < 0 || newY >= gameBoard[0].length || newX >= gameBoard[0].length) {
-            //     // Out of bounds, so don't move
-            //     return;
-            // }
-
-            // Check if the new position is walkable (i.e., is a floor)
-            if (gameBoard[newY][newX] === floor) {
-                this.nextX = newX;
-                this.nextY = newY;
-                moveable = true;
+            // Boundary check
+            if (newY >= 0 && newY < gameBoard.length && newX >= 0 && newX < gameBoard[newY].length) {
+                // Check if the new position is walkable
+                if (gameBoard[newY][newX] === floor) {
+                    drawLineFromCell(this.posX, this.posY, newX, newY, 'red', 1);
+                    this.nextX = newX;
+                    this.nextY = newY;
+                    moveable = true;
+                }
             }
-            else {
-                continue;
-            }
+            attempts++;
         }
     }
+
     moveNext(gameBoard) {
         if (gameBoard[this.nextY][this.nextX] == floor) {
             // Update the game state array for the old position
@@ -128,5 +127,5 @@ class NPC {
                 console.error("Invalid next position:", this.nextX, this.nextY);
             }
         }
-    }  
+    }
 }

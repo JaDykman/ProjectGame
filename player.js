@@ -92,11 +92,7 @@ function movePlayer(x, y) {
             player.posY = newY;
 
             gameBoard[newY][newX] = player.sprite;
-
-            // Update the DOM for the new position
-            const newCell = table.rows[newY].cells[newX];
-            newCell.innerHTML = player.sprite;
-
+            
         } else {
             console.error("Invalid player position:", newX, newY);
         }
