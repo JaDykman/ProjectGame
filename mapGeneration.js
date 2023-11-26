@@ -1,9 +1,10 @@
-
 //The size of the game floor
 let sizeY = 50; 
 let sizeX = 100;
 //Create a canvas element
 let canvas;
+let fogCanvas;
+let fogCtx;
 let ctx;
 const wall = "#";
 const floor = "";
@@ -21,8 +22,19 @@ let noiseGrid;
 let table = document.getElementById('gameBoard');
 ////////////////////////////////////
 
+
+
 function createGameBoard() { 
     player = makePlayer();
+    fogCanvas = document.getElementById("fogCanvas");
+    fogCanvas.width = sizeX * 15;
+    fogCanvas.height = sizeY * 15;
+    fogCtx = fogCanvas.getContext("2d");
+
+    canvas = document.getElementById("canvas");
+    canvas.width = sizeX * 15;
+    canvas.height = sizeY * 15;
+    ctx = canvas.getContext("2d");
     updatePlayerBar();
     make_noise_map(65); //Create the noise map. The number represents the density (%) of walls.
     cellular_automation(6); // Create the cellular automaton. The number represents the iterations of the cellular automaton.
@@ -38,11 +50,8 @@ function createGameBoard() {
             npcs.push(newEnemy);
         }
     }
-    //displayMap(gameBoard); // Display the game board.
-    canvas = document.getElementById("canvas");
-    canvas.width = sizeX * 15;
-    canvas.height = sizeY * 15;
-    ctx = canvas.getContext("2d");
+    let playerPosition = getCellScreenPosition(player.posX, player.posY);
+    drawCircleWithGradient(playerPosition.x, playerPosition.y, 75, 100); // Draw on canvas with id 'myCanvas'
 }
 function moveAll(){
     for(let npc of npcs){
