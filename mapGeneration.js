@@ -21,6 +21,7 @@ let table;
 
 function createGameBoard() { 
     player = makePlayer();
+    updatePlayerBar();
     make_noise_map(65); //Create the noise map. The number represents the density (%) of walls.
     cellular_automation(6); // Create the cellular automaton. The number represents the iterations of the cellular automaton.
     defineRooms(); // Find and define the rooms.

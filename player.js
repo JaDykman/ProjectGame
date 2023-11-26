@@ -6,12 +6,13 @@ class Player {
         this.pClass = pClass;
         this.posX = posX;
         this.posY = posY;
+        this.name;
     }
 }
 function makePlayer() {
-    let playerName = prompt("Who dares to enter the caves? ");
-    let playerClass = parseInt(prompt("What is your trade?(1:Knight, 2:Archer, 3:Barb, 4:Mage) "))
     let player = new Player();
+    player.name = prompt("Who dares to enter the caves? ");
+    let playerClass = parseInt(prompt("What is your trade?(1:Knight, 2:Archer, 3:Barb, 4:Mage) "))
     const classOne = {
         class: "Knight",
         sprite: "|",
@@ -63,40 +64,41 @@ function makePlayer() {
             break;
         default:
             //restart function
-            alert(playerName + ", that was not one of your options!");
+            alert(player.name + ", that was not one of your options!");
             return makePlayer();
     }
-    alert("Ah, you are " + playerName + ", The " + player.pClass);
+    alert("Ah, you are " + player.name + ", The " + player.pClass);
     return player;
 }
 function movePlayer(x, y) {
-    // Update the game state array for the old position
-    gameBoard[player.posY][player.posX] = floor;
-
     // Calculate the new position
     let newX = player.posX + x;
     let newY = player.posY - y;
+    if (gameBoard[newY][newX] == floor) {
+        
+    
+        // Update the game state array for the old position
+        gameBoard[player.posY][player.posX] = floor;
 
-    // Check if the new position is within the bounds of the game board
-    if (newY >= 0 && newY < gameBoard.length && newX >= 0 && newX < gameBoard[newY].length) {
-        // Clear the old position in the DOM
-        let table = document.getElementById('gameBoard');
-        const oldCell = table.rows[player.posY].cells[player.posX];
-        oldCell.innerHTML = floor;
+        // Check if the new position is within the bounds of the game board
+        if (newY >= 0 && newY < gameBoard.length && newX >= 0 && newX < gameBoard[newY].length) {
+            // Clear the old position in the DOM
+            let table = document.getElementById('gameBoard');
+            const oldCell = table.rows[player.posY].cells[player.posX];
+            oldCell.innerHTML = floor;
 
-        // Update the player's position
-        player.posX = newX;
-        player.posY = newY;
+            // Update the player's position
+            player.posX = newX;
+            player.posY = newY;
 
-        gameBoard[newY][newX] = player.sprite;
+            gameBoard[newY][newX] = player.sprite;
 
-        // Update the DOM for the new position
-        const newCell = table.rows[newY].cells[newX];
-        newCell.innerHTML = player.sprite;
-        console.log(newCell.innerHTML);
+            // Update the DOM for the new position
+            const newCell = table.rows[newY].cells[newX];
+            newCell.innerHTML = player.sprite;
 
-    } else {
-        console.error("Invalid player position:", newX, newY);
+        } else {
+            console.error("Invalid player position:", newX, newY);
+        }
     }
-    console.log("Moved ", x, y);
 }

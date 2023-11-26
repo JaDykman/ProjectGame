@@ -104,30 +104,29 @@ class NPC {
         }
     }
     moveNext(gameBoard) {
-    // Update the game state array for the old position
-    gameBoard[this.posY][this.posX] = floor;
+        if (gameBoard[this.nextY][this.nextX] == floor) {
+            // Update the game state array for the old position
+            gameBoard[this.posY][this.posX] = floor;
 
-    // Check if the new position is within the bounds of the game board
-    if (this.nextY >= 0 && this.nextY < gameBoard.length && this.nextX >= 0 && this.nextX < gameBoard[this.nextY].length) {
-        // Update the game state array for the new position
-        gameBoard[this.nextY][this.nextX] = this.id;
+            // Check if the new position is within the bounds of the game board
+            if (this.nextY >= 0 && this.nextY < gameBoard.length && this.nextX >= 0 && this.nextX < gameBoard[this.nextY].length) {
+                // Update the game state array for the new position
+                gameBoard[this.nextY][this.nextX] = this.id;
 
-        // Update the DOM
-        let table = document.getElementById('gameBoard');
-        const oldCell = table.rows[this.posY].cells[this.posX];
-        oldCell.innerHTML = ''; // Clear the old position
+                // Update the DOM
+                let table = document.getElementById('gameBoard');
+                const oldCell = table.rows[this.posY].cells[this.posX];
+                oldCell.innerHTML = ''; // Clear the old position
 
-        const newCell = table.rows[this.nextY].cells[this.nextX];
-        newCell.innerHTML = `<img src="${this.sprite}" alt="NPC">`;
+                const newCell = table.rows[this.nextY].cells[this.nextX];
+                newCell.innerHTML = `<img src="${this.sprite}" alt="NPC">`;
 
-        // Update the NPC's position properties
-        this.posX = this.nextX;
-        this.posY = this.nextY;
-    } else {
-        console.error("Invalid next position:", this.nextX, this.nextY);
-    }
-}
-    
-    
-    
+                // Update the NPC's position properties
+                this.posX = this.nextX;
+                this.posY = this.nextY;
+            } else {
+                console.error("Invalid next position:", this.nextX, this.nextY);
+            }
+        }
+    }  
 }
