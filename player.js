@@ -74,27 +74,31 @@ function movePlayer(x, y) {
     // Calculate the new position
     let newX = player.posX + x;
     let newY = player.posY - y;
-    if (gameBoard[newY][newX] == floor) {
-        
-    
-        // Update the game state array for the old position
-        gameBoard[player.posY][player.posX] = floor;
+    if (newY >= 0 && newY < gameBoard.length && newX >= 0 && newX < gameBoard[newY].length) {
+        switch (gameBoard[newY][newX]) {
+            case floor:
+                // Update the game state array for the old position
+                gameBoard[player.posY][player.posX] = floor;
 
-        // Check if the new position is within the bounds of the game board
-        if (newY >= 0 && newY < gameBoard.length && newX >= 0 && newX < gameBoard[newY].length) {
-            // Clear the old position in the DOM
-            let table = document.getElementById('gameBoard');
-            const oldCell = table.rows[player.posY].cells[player.posX];
-            oldCell.innerHTML = floor;
+                // Check if the new position is within the bounds of the game board
+                // Clear the old position in the DOM
+                let table = document.getElementById('gameBoard');
+                const oldCell = table.rows[player.posY].cells[player.posX];
+                oldCell.innerHTML = floor;
 
-            // Update the player's position
-            player.posX = newX;
-            player.posY = newY;
+                // Update the player's position
+                player.posX = newX;
+                player.posY = newY;
 
-            gameBoard[newY][newX] = player.sprite;
-            
-        } else {
-            console.error("Invalid player position:", newX, newY);
+                gameBoard[newY][newX] = player.sprite;
+                break;
+            case wall:
+                break;
+            case door:
+                createGameBoard();
+                break;
+            default:
+                console.error("Invalid player position:", newX, newY);
         }
     }
 }

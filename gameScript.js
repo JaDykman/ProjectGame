@@ -6,31 +6,31 @@ window.addEventListener("keydown", function (event) {
         case "ArrowDown":
             // code for "down arrow" key press.
             playerTurn(0, -1);
-        break;
+            break;
         case "ArrowUp":
             // code for "up arrow" key press.
             playerTurn(0, 1);
-        break;
+            break;
         case "ArrowLeft":
             // code for "left arrow" key press.
             playerTurn(-1, 0);
-        break;
+            break;
         case "ArrowRight":
             // code for "right arrow" key press.
             playerTurn(1, 0);
-        break;
+            break;
         default:
-        return; // Quit when this doesn't handle the key event.
+            return; // Quit when this doesn't handle the key event.
     }
     // Cancel the default action to avoid it being handled twice
     event.preventDefault();
 }, true);
-    
-function playerTurn(x, y) { 
+
+function playerTurn(x, y) {
     //Clear the canvas
     fogCtx.clearRect(0, 0, fogCtx.canvas.width, fogCtx.canvas.height);
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    movePlayer(x,y);
+    movePlayer(x, y);
     moveAll();
     setAllNextMove();
     displayMap(gameBoard);
@@ -40,20 +40,17 @@ function playerTurn(x, y) {
 }
 function updatePlayerBar() {
     let playerBar = document.getElementById('PlayerStatsBar');
-    playerBar.innerHTML = player.name + " the " + player.pClass + "     Health: " + player.health;
+    playerBar.innerHTML = player.name +
+        " the " + player.pClass +
+        " Health: " + player.health +
+        " Floor: " + floorCount;
 }
 function drawCircleWithGradient(centerX, centerY, radius, distance) {
-    
     // Create radial gradient
     const gradient = fogCtx.createRadialGradient(centerX, centerY, radius, centerX, centerY, radius + distance);
-    gradient.addColorStop(0, 'rgba(0, 0, 0, 0)'); // Start with transparent center
-    gradient.addColorStop(1, 'rgba(0, 0, 0, 1)'); // Transition to black at the edge
-
-    // Draw circle with gradient
-    fogCtx.beginPath();
-    fogCtx.arc(centerX, centerY, radius + distance, 0, 2 * Math.PI);
-    fogCtx.fillStyle = gradient;
-    fogCtx.fill();
+    gradient.addColorStop(0, 'rgba(0, 0, 0, 1)'); // Start with transparent center
+    gradient.addColorStop(.5, 'rgba(0, 0, 0, .5)'); // Start with transparent center
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)'); // Start with transparent center
 
     // Fill the rest of the canvas with black
     fogCtx.globalCompositeOperation = 'source-over';
@@ -63,10 +60,16 @@ function drawCircleWithGradient(centerX, centerY, radius, distance) {
     // Redraw the gradient circle to blend properly
     fogCtx.globalCompositeOperation = 'destination-out';
     fogCtx.beginPath();
-    fogCtx.arc(centerX, centerY, radius + distance, 0, 2 * Math.PI);
+    fogCtx.arc(centerX, centerY, radius + distance, 0, 5 * Math.PI);
+    fogCtx.fillStyle = gradient;
     fogCtx.fill();
 
     // Reset the composite operation
     fogCtx.globalCompositeOperation = 'source-over';
 }
-
+function startGame() {
+    player = makePlayer();
+    createGameBoard();
+    let playerPosition = getCellScreenPosition(player.posX, player.posY);
+    drawCircleWithGradient(playerPosition.x, playerPosition.y, 75, 100); // Draw on canvas with id 'myCanvas'
+}

@@ -1,8 +1,8 @@
 // Enumerator object to define the types of enemies and their properties
-const Enumerator  = {
+const Enumerator = {
     sheep: {
-        health: 1, 
-        damage: 0, 
+        health: 1,
+        damage: 0,
         sprite: 'sheep.png' // Path to the image used for the sheep NPC
     },
     // Add more enemy types with their properties here as needed
@@ -73,7 +73,7 @@ class NPC {
 
         // Retrieve the cell at the NPC's position and insert the NPC sprite as an image
         const cell = table.rows[this.posY].cells[this.posX];
-       
+
         cell.innerHTML = `<img src="${this.sprite}" alt="NPC">`;
     }
     setNextMove(gameBoard) {

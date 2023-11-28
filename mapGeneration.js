@@ -1,5 +1,5 @@
 //The size of the game floor
-let sizeY = 50; 
+let sizeY = 50;
 let sizeX = 100;
 //Create a canvas element
 let canvas;
@@ -11,7 +11,7 @@ const floor = "";
 const water = "~";
 const door = "@";
 let player;
-
+let floorCount = 0;
 ////////////////////////////////////
 // Variables created when the createGameBoard() function is called
 let gameBoard = []; // This is the entire game board
@@ -21,20 +21,16 @@ let npcs = [];
 let noiseGrid;
 let table = document.getElementById('gameBoard');
 ////////////////////////////////////
-
-
-
-function createGameBoard() { 
-    player = makePlayer();
+function createGameBoard() {
     fogCanvas = document.getElementById("fogCanvas");
     fogCanvas.width = sizeX * 15;
     fogCanvas.height = sizeY * 15;
     fogCtx = fogCanvas.getContext("2d");
-
     canvas = document.getElementById("canvas");
     canvas.width = sizeX * 15;
     canvas.height = sizeY * 15;
     ctx = canvas.getContext("2d");
+    floorCount++;
     updatePlayerBar();
     make_noise_map(65); //Create the noise map. The number represents the density (%) of walls.
     cellular_automation(6); // Create the cellular automaton. The number represents the iterations of the cellular automaton.
@@ -45,21 +41,19 @@ function createGameBoard() {
     for (let roomKey in rooms) { // Place a sheep in the center of each room
         let room = rooms[roomKey];
         let center = getCenter(room);
-        if(center != doorPosition && center[0] != player.posX && center[1] != player.y){ //Make sure we aren't spawning an entity on top of the door
-            let newEnemy = new AddNPC('sheep', center[0], center[1]); 
+        if (center != doorPosition && center[0] != player.posX && center[1] != player.y) { //Make sure we aren't spawning an entity on top of the door
+            let newEnemy = new AddNPC('sheep', center[0], center[1]);
             npcs.push(newEnemy);
         }
     }
-    let playerPosition = getCellScreenPosition(player.posX, player.posY);
-    drawCircleWithGradient(playerPosition.x, playerPosition.y, 75, 100); // Draw on canvas with id 'myCanvas'
 }
-function moveAll(){
-    for(let npc of npcs){
+function moveAll() {
+    for (let npc of npcs) {
         npc.moveNext(gameBoard);
     }
 }
 function setAllNextMove() {
-    for(let npc of npcs){
+    for (let npc of npcs) {
         npc.setNextMove(gameBoard);
     }
 }
@@ -107,7 +101,7 @@ function make_noise_map(density) {
     for (let y = 0; y < sizeY; y++) {
         noiseGrid[y] = [];
         for (let x = 0; x < sizeX; x++) {
-            let random = Math.random()*100 + 1; 
+            let random = Math.random() * 100 + 1;
             if (random > density) {
                 noiseGrid[y][x] = floor;
             }
@@ -137,7 +131,7 @@ function cellular_automation(iterations) {
                         let checkX = x + offsetX;
                         let checkY = y + offsetY;
 
-                        if (checkX >= 0 && checkX < sizeX && checkY >= 0 && checkY < sizeY && 
+                        if (checkX >= 0 && checkX < sizeX && checkY >= 0 && checkY < sizeY &&
                             (currentMap[checkY][checkX] !== wall)) {
                             continue;
                         } else {
@@ -145,14 +139,11 @@ function cellular_automation(iterations) {
                         }
                     }
                 }
-
                 newGrid[y][x] = surroundingWalls > 4 ? wall : floor; // If it has more than 4 surrounding walls, set the cell to a wall
             }
         }
-
         currentMap = newGrid;
     }
-
     gameBoard = currentMap;
     return currentMap;
 }
@@ -168,7 +159,7 @@ function defineRooms() {
             }
         }
     }
-    connectRooms(); 
+    connectRooms();
     createDoor();
     return rooms;
 }
@@ -211,13 +202,13 @@ function createDoor() {
 }
 function connectRooms() {
     rooms.sort((a, b) => {
-    if (a.x < b.x) {
-        return -1;
-    } else if (a.x > b.x) {
-        return 1;
-    } else {
-        return 0;
-    }
+        if (a.x < b.x) {
+            return -1;
+        } else if (a.x > b.x) {
+            return 1;
+        } else {
+            return 0;
+        }
     });
     for (let i = 0; i < rooms.length - 1; i++) {
         const start = getCenter(rooms[i]);
@@ -312,4 +303,3 @@ function getCellScreenPosition(posX, posY) {
         y: centerY
     };
 }
-
