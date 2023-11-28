@@ -5,11 +5,14 @@ let sizeX = 100;
 //Create a canvas element
 let canvas;
 let ctx;
-const wall = "#";
-const floor = "";
+const wall = 'wall.png';
+const floor = 'floor.png';
 const water = "~";
 const door = "@";
 let player;
+
+
+
 
 ////////////////////////////////////
 // Variables created when the createGameBoard() function is called
@@ -82,6 +85,10 @@ function displayMap(map) {
             else if (map[y][x] == player.sprite) {
                 cell.innerHTML = player.sprite;
                 cell.style.color = 'red';
+            } else if(map[y][x] == floor){
+                cell.innerHTML = `<img src="${floor}" alt="NPC">`;
+            } else if(map[y][x] == wall){
+                cell.innerHTML = `<img src="${wall}" alt="NPC">`;
             }
             else {
                 // For non-NPC cells, use textContent as before
@@ -232,7 +239,7 @@ function createDrunkardsWalkCorridor(start, end) {
     // Assuming start and end are arrays of [x, y] pairs
     let [x, y] = start;
     while (x !== end[0] || y !== end[1]) {
-        gameBoard[y][x] = ""; // Mark the current cell as part of the corridor
+        gameBoard[y][x] = floor; // Mark the current cell as part of the corridor
         // Randomly decide whether to move in x or y direction
         if (Math.random() < 0.5) {
             // Move in x direction
