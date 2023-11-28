@@ -96,5 +96,13 @@ function movePlayer(x, y) {
         } else {
             console.error("Invalid player position:", newX, newY);
         }
+    } else if (typeof gameBoard[newY][newX] === 'number') {
+        let npc = allEnemies.find(npc => npc.id === gameBoard[newY][newX])
+        if (npc){
+            npc.health -= player.baseDMG;
+            if (npc.health <= 0){
+                gameBoard[newY][newX] = floor;
+            }
+        }
     }
 }
