@@ -2,3 +2,5 @@ Week 3
 Max - I've created a function that allows you to create a character
 Week 4
 Max - I've built the movement system out of what was found in the NPCScript.js
+Week 5
+Max - I'm not actually sure what week it is, but for the past two classes I've been putting together the combat system with Jacob's help with mechanics like what the floor is or what a variable is called.

@@ -101,7 +101,8 @@ function movePlayer(x, y) {
         if (npc){
             npc.health -= player.baseDMG;
             if (npc.health <= 0){
-                gameBoard[newY][newX] = floor;
+                gameBoard[npc.nextY][npc.nextX] = floor;
+                gameBoard[npc.posY][npc.posX] = floor;
             }
         }
     }
