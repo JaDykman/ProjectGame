@@ -6,8 +6,8 @@ let canvas;
 let fogCanvas;
 let fogCtx;
 let ctx;
-const wall = "#";
-const floor = "";
+const wall = 'wall.png';
+const floor = 'floor.png';
 const water = "~";
 const door = "@";
 let player;
@@ -20,7 +20,7 @@ let doorPosition = []; // Positions of the doors/staircases in the game
 let npcs = [];
 let noiseGrid;
 let table = document.getElementById('gameBoard');
-////////////////////////////////////
+
 function createGameBoard() {
     fogCanvas = document.getElementById("fogCanvas");
     fogCanvas.width = sizeX * 15;
@@ -31,7 +31,8 @@ function createGameBoard() {
     canvas.height = sizeY * 15;
     ctx = canvas.getContext("2d");
     floorCount++;
-    updatePlayerBar();
+
+  updatePlayerBar();
     make_noise_map(65); //Create the noise map. The number represents the density (%) of walls.
     cellular_automation(6); // Create the cellular automaton. The number represents the iterations of the cellular automaton.
     defineRooms(); // Find and define the rooms.
@@ -83,8 +84,12 @@ function displayMap(map) {
                 }
             }
             else if (map[y][x] == player.sprite) {
-                cell.innerHTML = player.sprite;
+                cell.innerHTML = `<img src="${player.sprite}" alt="Player">`;
                 cell.style.color = 'red';
+            } else if (map[y][x] == floor) {
+                cell.innerHTML = `<img src="${floor}" alt="Floor">`;
+            } else if (map[y][x] == wall) {
+                cell.innerHTML = `<img src="${wall}" alt="Wall">`;
             }
             else {
                 // For non-NPC cells, use textContent as before
@@ -232,7 +237,7 @@ function createDrunkardsWalkCorridor(start, end) {
     // Assuming start and end are arrays of [x, y] pairs
     let [x, y] = start;
     while (x !== end[0] || y !== end[1]) {
-        gameBoard[y][x] = ""; // Mark the current cell as part of the corridor
+        gameBoard[y][x] = floor; // Mark the current cell as part of the corridor
         // Randomly decide whether to move in x or y direction
         if (Math.random() < 0.5) {
             // Move in x direction
