@@ -1,5 +1,5 @@
-class Player { 
-    constructor(health, baseDMG, sprite, pClass, posX, posY) { 
+class Player {
+    constructor(health, baseDMG, sprite, pClass, posX, posY) {
         this.health = health;
         this.baseDMG = baseDMG;
         this.sprite = sprite;
@@ -15,25 +15,25 @@ function makePlayer() {
     let playerClass = parseInt(prompt("What is your trade?(1:Knight, 2:Archer, 3:Barb, 4:Mage) "))
     const classOne = {
         class: "Knight",
-        sprite: "|",
+        sprite: 'knight.png',
         health: 10,
         baseDMG: 3,
     };
     const classTwo = {
         class: "Archer",
-        sprite: "^",
+        sprite: 'archer.png',
         health: 7,
         baseDMG: 2,
     };
     const classThree = {
         class: "Barbarian",
-        sprite: "$",
+        sprite: 'barb.png',
         health: 20,
         baseDMG: 1,
     };
     const classFour = {
         class: "Mage",
-        sprite: "%",
+        sprite: 'mage.png',
         health: 7,
         baseDMG: 2,
     };
@@ -75,8 +75,8 @@ function movePlayer(x, y) {
     let newX = player.posX + x;
     let newY = player.posY - y;
     if (gameBoard[newY][newX] == floor) {
-        
-    
+
+
         // Update the game state array for the old position
         gameBoard[player.posY][player.posX] = floor;
 
@@ -92,7 +92,7 @@ function movePlayer(x, y) {
             player.posY = newY;
 
             gameBoard[newY][newX] = player.sprite;
-            
+
         } else {
             console.error("Invalid player position:", newX, newY);
         }

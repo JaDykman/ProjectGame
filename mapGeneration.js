@@ -1,6 +1,6 @@
 
 //The size of the game floor
-let sizeY = 50; 
+let sizeY = 50;
 let sizeX = 100;
 //Create a canvas element
 let canvas;
@@ -10,9 +10,6 @@ const floor = 'floor.png';
 const water = "~";
 const door = "@";
 let player;
-
-
-
 
 ////////////////////////////////////
 // Variables created when the createGameBoard() function is called
@@ -24,7 +21,7 @@ let noiseGrid;
 let table = document.getElementById('gameBoard');
 ////////////////////////////////////
 
-function createGameBoard() { 
+function createGameBoard() {
     player = makePlayer();
     updatePlayerBar();
     make_noise_map(65); //Create the noise map. The number represents the density (%) of walls.
@@ -36,8 +33,8 @@ function createGameBoard() {
     for (let roomKey in rooms) { // Place a sheep in the center of each room
         let room = rooms[roomKey];
         let center = getCenter(room);
-        if(center != doorPosition && center[0] != player.posX && center[1] != player.y){ //Make sure we aren't spawning an entity on top of the door
-            let newEnemy = new AddNPC('sheep', center[0], center[1]); 
+        if (center != doorPosition && center[0] != player.posX && center[1] != player.y) { //Make sure we aren't spawning an entity on top of the door
+            let newEnemy = new AddNPC('sheep', center[0], center[1]);
             npcs.push(newEnemy);
         }
     }
@@ -47,13 +44,13 @@ function createGameBoard() {
     canvas.height = sizeY * 15;
     ctx = canvas.getContext("2d");
 }
-function moveAll(){
-    for(let npc of npcs){
+function moveAll() {
+    for (let npc of npcs) {
         npc.moveNext(gameBoard);
     }
 }
 function setAllNextMove() {
-    for(let npc of npcs){
+    for (let npc of npcs) {
         npc.setNextMove(gameBoard);
     }
 }
@@ -83,12 +80,12 @@ function displayMap(map) {
                 }
             }
             else if (map[y][x] == player.sprite) {
-                cell.innerHTML = player.sprite;
+                cell.innerHTML = `<img src="${player.sprite}" alt="Player">`;
                 cell.style.color = 'red';
-            } else if(map[y][x] == floor){
-                cell.innerHTML = `<img src="${floor}" alt="NPC">`;
-            } else if(map[y][x] == wall){
-                cell.innerHTML = `<img src="${wall}" alt="NPC">`;
+            } else if (map[y][x] == floor) {
+                cell.innerHTML = `<img src="${floor}" alt="Floor">`;
+            } else if (map[y][x] == wall) {
+                cell.innerHTML = `<img src="${wall}" alt="Wall">`;
             }
             else {
                 // For non-NPC cells, use textContent as before
@@ -105,7 +102,7 @@ function make_noise_map(density) {
     for (let y = 0; y < sizeY; y++) {
         noiseGrid[y] = [];
         for (let x = 0; x < sizeX; x++) {
-            let random = Math.random()*100 + 1; 
+            let random = Math.random() * 100 + 1;
             if (random > density) {
                 noiseGrid[y][x] = floor;
             }
@@ -135,7 +132,7 @@ function cellular_automation(iterations) {
                         let checkX = x + offsetX;
                         let checkY = y + offsetY;
 
-                        if (checkX >= 0 && checkX < sizeX && checkY >= 0 && checkY < sizeY && 
+                        if (checkX >= 0 && checkX < sizeX && checkY >= 0 && checkY < sizeY &&
                             (currentMap[checkY][checkX] !== wall)) {
                             continue;
                         } else {
@@ -166,7 +163,7 @@ function defineRooms() {
             }
         }
     }
-    connectRooms(); 
+    connectRooms();
     createDoor();
     return rooms;
 }
@@ -209,13 +206,13 @@ function createDoor() {
 }
 function connectRooms() {
     rooms.sort((a, b) => {
-    if (a.x < b.x) {
-        return -1;
-    } else if (a.x > b.x) {
-        return 1;
-    } else {
-        return 0;
-    }
+        if (a.x < b.x) {
+            return -1;
+        } else if (a.x > b.x) {
+            return 1;
+        } else {
+            return 0;
+        }
     });
     for (let i = 0; i < rooms.length - 1; i++) {
         const start = getCenter(rooms[i]);
