@@ -32,7 +32,7 @@ function createGameBoard() {
     ctx = canvas.getContext("2d");
     floorCount++;
 
-  updatePlayerBar();
+    updatePlayerBar();
     make_noise_map(65); //Create the noise map. The number represents the density (%) of walls.
     cellular_automation(6); // Create the cellular automaton. The number represents the iterations of the cellular automaton.
     defineRooms(); // Find and define the rooms.
@@ -60,10 +60,10 @@ function setAllNextMove() {
 }
 function placePlayer() {
     let randomRoomIndex = Math.floor(Math.random() * rooms.length);
-    let room = rooms[randomRoomIndex]
+    let room = rooms[randomRoomIndex];
     let center = getCenter(room);
     table = document.getElementById('gameBoard');
-    gameBoard[center[1]][center[0]] = player.sprite; // Store the player's ID
+    gameBoard[center[1]][center[0]] = player; // Store the player's ID
     player.posX = center[0];
     player.posY = center[1];
 }
@@ -83,7 +83,7 @@ function displayMap(map) {
                     cell.innerHTML = `<img src="${npc.sprite}" alt="NPC">`;
                 }
             }
-            else if (map[y][x] == player.sprite) {
+            else if (map[y][x] == player) {
                 cell.innerHTML = `<img src="${player.sprite}" alt="Player">`;
                 cell.style.color = 'red';
             } else if (map[y][x] == floor) {

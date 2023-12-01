@@ -74,10 +74,7 @@ function movePlayer(x, y) {
     // Calculate the new position
     let newX = player.posX + x;
     let newY = player.posY - y;
-  
-    // Update the game state array for the old position
-    gameBoard[player.posY][player.posX] = floor;
-  
+
     if (newY >= 0 && newY < gameBoard.length && newX >= 0 && newX < gameBoard[newY].length) {
         switch (gameBoard[newY][newX]) {
             case floor:
@@ -93,11 +90,7 @@ function movePlayer(x, y) {
                 player.posX = newX;
                 player.posY = newY;
 
-            gameBoard[newY][newX] = player.sprite;
-
-        } else {
-            console.error("Invalid player position:", newX, newY);
-                gameBoard[newY][newX] = player.sprite;
+                gameBoard[newY][newX] = player;
                 break;
             case wall:
                 break;
