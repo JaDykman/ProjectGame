@@ -15,25 +15,25 @@ function makePlayer() {
     let playerClass = parseInt(prompt("What is your trade?(1:Knight, 2:Archer, 3:Barb, 4:Mage) "))
     const classOne = {
         class: "Knight",
-        sprite: 'knight.png',
+        sprite: 'sprites/knight.png',
         health: 10,
         baseDMG: 3,
     };
     const classTwo = {
         class: "Archer",
-        sprite: 'archer.png',
+        sprite: 'sprites/archer.png',
         health: 7,
         baseDMG: 2,
     };
     const classThree = {
         class: "Barbarian",
-        sprite: 'barb.png',
+        sprite: 'sprites/barb.png',
         health: 20,
         baseDMG: 1,
     };
     const classFour = {
         class: "Mage",
-        sprite: 'mage.png',
+        sprite: 'sprites/mage.png',
         health: 7,
         baseDMG: 2,
     };

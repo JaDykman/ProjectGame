@@ -6,10 +6,10 @@ let canvas;
 let fogCanvas;
 let fogCtx;
 let ctx;
-const wall = 'wall.png';
-const floor = 'floor.png';
+const wall = 'sprites/wall.png';
+const floor = 'sprites/floor.png';
 const water = "~";
-const door = 'stairs.jpg';
+const door = 'sprites/stairs.jpg';
 
 let player;
 let floorCount = 0;

@@ -3,7 +3,7 @@ const Enumerator = {
     sheep: {
         health: 1,
         damage: 0,
-        sprite: 'sheep.png' // Path to the image used for the sheep NPC
+        sprite: 'sprites/sheep.png' // Path to the image used for the sheep NPC
     },
     // Add more enemy types with their properties here as needed
 };
