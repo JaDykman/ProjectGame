@@ -97,31 +97,39 @@ function movePlayer(x, y) {
             case door:
                 createGameBoard();
                 break;
-            case typeof 'string':
-
             default:
                 let npc = allEnemies.find(npc => npc.id === gameBoard[newY][newX]);
                 if (npc) {
                     npc.health -= player.baseDMG;
                     if (npc.health <= 0) {
-                        // Update the game state array for the old position
-                        gameBoard[player.posY][player.posX] = floor;
-                        // Check if the new position is within the bounds of the game board
-                        // Clear the old position in the DOM
-                        let table = document.getElementById('gameBoard');
-                        const oldCell = table.rows[player.posY].cells[player.posX];
-                        oldCell.innerHTML = `<img src="${floor}" alt="Floor">`;
+                        // Remove the NPC from the array
+                        const npcIndex = allEnemies.indexOf(npc);
+                        if (npcIndex > -1) {
+                            allEnemies.splice(npcIndex, 1); 
+                        }
 
+                        // Delete NPC from the game board
+                        gameBoard[npc.posY][npc.posX] = floor;
+            
+                        console.log(npc.id + " died!");
+                    }
+            
+                    // Update the game state array for the old position of the player
+                    gameBoard[player.posY][player.posX] = floor;
+                    let table = document.getElementById('gameBoard');
+                    const oldCell = table.rows[player.posY].cells[player.posX];
+                    oldCell.innerHTML = `<img src="${floor}" alt="Floor">`;
+            
+                    // Move the player only if the NPC is dead
+                    if (npc.health <= 0) {
                         // Update the player's position
                         player.posX = newX;
                         player.posY = newY;
-                        gameBoard[npc.posY][npc.posX] = floor;
                         gameBoard[newY][newX] = player;
-
-                        console.log(npc.name + " died!");
                     }
                 }
                 break;
+                
         }
     }
 }
