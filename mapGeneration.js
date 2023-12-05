@@ -66,40 +66,44 @@ function placePlayer() {
     player.posY = center[1];
 }
 function displayMap(map) {
-    table = document.getElementById('gameBoard');
-    table.innerHTML = ""; // Clear the table
+    console.time("displayMap Execution Time"); // Start timer
+    let table = document.getElementById('gameBoard');
+    let fragment = document.createDocumentFragment(); // Create a document fragment
+
+    // Convert allEnemies to a Map for faster access
+    let npcMap = new Map(allEnemies.map(npc => [npc.id, npc]));
 
     for (let y = 0; y < sizeY; y++) {
-        const row = table.insertRow();
+        let row = document.createElement('tr'); // Create a row
         for (let x = 0; x < sizeX; x++) {
-            const cell = row.insertCell();
-            cell.style.color = '';
-            // Check if the cell contains an NPC ID
-            if (typeof map[y][x] === 'number') {
-                let npc = allEnemies.find(npc => npc.id === map[y][x]);
-                if (npc) {
-                    cell.innerHTML = `<img src="${npc.sprite}" alt="NPC">`;
+            let cell = document.createElement('td'); // Create a cell
+
+            if (typeof map[y][x] === 'number' && npcMap.has(map[y][x])) {
+                let npc = npcMap.get(map[y][x]);
+                cell.innerHTML = `<img src="${npc.sprite}" alt="NPC">`;
+            } else if (map[y][x] === player) {
+                cell.innerHTML = `<img src="${player.sprite}" alt="Player">`;
+            } else {
+                let imgSrc = (map[y][x] === floor) ? floor : 
+                             (map[y][x] === wall) ? wall : 
+                             (map[y][x] === door) ? door : null;
+                if (imgSrc) {
+                    cell.innerHTML = `<img src="${imgSrc}" alt="${imgSrc}">`;
+                } else {
+                    cell.textContent = map[y][x];
                 }
             }
-            else if (map[y][x] == player) {
-                cell.innerHTML = `<img src="${player.sprite}" alt="Player">`;
-                cell.style.color = 'red';
-            } else if (map[y][x] == floor) {
-                cell.innerHTML = `<img src="${floor}" alt="Floor">`;
-            } else if (map[y][x] == wall) {
-                cell.innerHTML = `<img src="${wall}" alt="Wall">`;
-            } else if (map[y][x] == door) {
-                cell.innerHTML = `<img src="${door}" alt="Wall">`;
-            }
-            else {
-                // For non-NPC cells, use textContent as before
-                cell.textContent = map[y][x];
-            }
+            row.appendChild(cell); // Append cell to row
         }
+        fragment.appendChild(row); // Append row to fragment
     }
 
-    document.body.appendChild(table);
+    table.innerHTML = ""; // Clear the table
+    table.appendChild(fragment); // Append the fragment to the table
+    console.timeEnd("displayMap Execution Time"); // End timer and log time
+
 }
+
 function make_noise_map(density) {
     noiseGrid = []; // Clear/Create the noise grid
     rooms = []; // Clear the list of rooms
