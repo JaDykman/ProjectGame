@@ -97,8 +97,31 @@ function movePlayer(x, y) {
             case door:
                 createGameBoard();
                 break;
+            case typeof 'string':
+
             default:
-                console.error("Invalid player position:", newX, newY);
+                let npc = allEnemies.find(npc => npc.id === gameBoard[newY][newX]);
+                if (npc) {
+                    npc.health -= player.baseDMG;
+                    if (npc.health <= 0) {
+                        // Update the game state array for the old position
+                        gameBoard[player.posY][player.posX] = floor;
+                        // Check if the new position is within the bounds of the game board
+                        // Clear the old position in the DOM
+                        let table = document.getElementById('gameBoard');
+                        const oldCell = table.rows[player.posY].cells[player.posX];
+                        oldCell.innerHTML = `<img src="${floor}" alt="Floor">`;
+
+                        // Update the player's position
+                        player.posX = newX;
+                        player.posY = newY;
+                        gameBoard[npc.posY][npc.posX] = floor;
+                        gameBoard[newY][newX] = player;
+
+                        console.log(npc.name + " died!");
+                    }
+                }
+                break;
         }
     }
 }

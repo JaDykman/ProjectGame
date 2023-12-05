@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GROTTMANNEN!</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: lightblue;
+        margin: 0;
+        padding: 0;
+      }
+      #container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      h1 {
+        color: darkblue;
+      }
+
+      p {
+        color: darkblue;
+        max-width: 600px;
+        margin: 20px 0;
+      }
+
+      button {
+        background-color: lightblue;
+        color: black;
+        font-size: 16px;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: palegreen;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <h1>GROTTMANNEN</h1>
+      <p>Welcome to this amazing game!</p>
+      <button onclick="window.location.href = 'gamePage.html'">
+        Start Playing
+      </button>
+    </div>
+  </body>
+</html>

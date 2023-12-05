@@ -96,7 +96,6 @@ class NPC {
                     this.nextX = newX;
                     this.nextY = newY;
                     moveable = true;
-                    console.log(`Attempt: ${attempts}, MoveX: ${moveX}, MoveY: ${moveY}, NewX: ${newX}, NewY: ${newY}`);
                 }
             }
             attempts++;

@@ -1,6 +1,6 @@
 //The size of the game floor
-let sizeY = 75;
-let sizeX = 75;
+let sizeY = 50;
+let sizeX = 100;
 //Create a canvas element
 let canvas;
 let fogCanvas;
@@ -8,8 +8,7 @@ let fogCtx;
 let ctx;
 const wall = 'sprites/wall.png';
 const floor = 'sprites/floor.png';
-const water = "~";
-const door = 'sprites/stairs.jpg';
+const door = 'sprites/stairs.png';
 
 let player;
 let floorCount = 0;
@@ -89,7 +88,7 @@ function displayMap(map) {
                 cell.innerHTML = `<img src="${floor}" alt="Floor">`;
             } else if (map[y][x] == wall) {
                 cell.innerHTML = `<img src="${wall}" alt="Wall">`;
-            }else if(map[y][x] == door){
+            } else if (map[y][x] == door) {
                 cell.innerHTML = `<img src="${door}" alt="Wall">`;
             }
             else {
@@ -278,8 +277,6 @@ function drawLine(x1, y1, x2, y2, color, lineWidth = 1) {
 function drawLineFromCell(posX, posY, endX, endY, color, lineWidth) {
     let startPos = getCellScreenPosition(posX, posY);
     let endPos = getCellScreenPosition(endX, endY);
-    console.log("\n");
-    console.log(`Start Pos - x: ${startPos.x}, y: ${startPos.y}`, ` End Pos - x: ${endPos.x}, y: ${endPos.y}`);
 
     // Adjust start position relative to the canvas if needed
     let canvasRect = canvas.getBoundingClientRect();
@@ -289,7 +286,6 @@ function drawLineFromCell(posX, posY, endX, endY, color, lineWidth) {
     endPos.y -= canvasRect.top + window.scrollY;
 
 
-    console.log(`Start Pos - x: ${startPos.x}, y: ${startPos.y}`, ` End Pos - x: ${endPos.x}, y: ${endPos.y}`);
     drawLine(startPos.x, startPos.y, endPos.x, endPos.y, color, lineWidth);
 }
 function getCellScreenPosition(posX, posY) {

@@ -9,7 +9,7 @@ window.addEventListener("keydown", function (event) {
     clearTimeout(debounceTimeout);
 
     // Set a new timeout
-    debounceTimeout = setTimeout(function() {
+    debounceTimeout = setTimeout(function () {
         switch (event.key) {
             case "ArrowDown":
                 playerTurn(0, -1);
@@ -40,8 +40,8 @@ function playerTurn(x, y) {
     moveAll();
     setAllNextMove();
     displayMap(gameBoard);
-    //let playerPosition = getCellScreenPosition(player.posX, player.posY);
-    //drawCircleWithGradient(playerPosition.x, playerPosition.y, 75, 100);
+    let playerPosition = getCellScreenPosition(player.posX, player.posY);
+    drawCircleWithGradient(playerPosition.x, playerPosition.y, 75, 100);
     updatePlayerBar();
 }
 function updatePlayerBar() {
@@ -76,6 +76,6 @@ function drawCircleWithGradient(centerX, centerY, radius, distance) {
 function startGame() {
     player = makePlayer();
     createGameBoard();
-    //let playerPosition = getCellScreenPosition(player.posX, player.posY);
-    //drawCircleWithGradient(playerPosition.x, playerPosition.y, 75, 100); // Draw on canvas with id 'myCanvas'
+    let playerPosition = getCellScreenPosition(player.posX, player.posY);
+    drawCircleWithGradient(playerPosition.x, playerPosition.y, 75, 100); // Draw on canvas with id 'myCanvas'
 }
