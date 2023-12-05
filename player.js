@@ -84,7 +84,7 @@ function movePlayer(x, y) {
                 // Clear the old position in the DOM
                 let table = document.getElementById('gameBoard');
                 const oldCell = table.rows[player.posY].cells[player.posX];
-                oldCell.innerHTML = floor;
+                oldCell.innerHTML = `<img src="${floor}" alt="Floor">`;
 
                 // Update the player's position
                 player.posX = newX;

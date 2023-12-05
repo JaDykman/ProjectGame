@@ -1,6 +1,6 @@
 //The size of the game floor
-let sizeY = 50;
-let sizeX = 100;
+let sizeY = 75;
+let sizeX = 75;
 //Create a canvas element
 let canvas;
 let fogCanvas;
@@ -9,7 +9,8 @@ let ctx;
 const wall = 'wall.png';
 const floor = 'floor.png';
 const water = "~";
-const door = "@";
+const door = 'stairs.jpg';
+
 let player;
 let floorCount = 0;
 ////////////////////////////////////
@@ -17,7 +18,6 @@ let floorCount = 0;
 let gameBoard = []; // This is the entire game board
 let rooms = []; // This is a list of all the rooms in the game
 let doorPosition = []; // Positions of the doors/staircases in the game
-let npcs = [];
 let noiseGrid;
 let table = document.getElementById('gameBoard');
 
@@ -34,7 +34,7 @@ function createGameBoard() {
 
     updatePlayerBar();
     make_noise_map(65); //Create the noise map. The number represents the density (%) of walls.
-    cellular_automation(6); // Create the cellular automaton. The number represents the iterations of the cellular automaton.
+    cellular_automation(6); // Create the  cellular automaton. The number represents the iterations of the cellular automaton.
     defineRooms(); // Find and define the rooms.
     addBorder(); // Add a border around the the entire board.
     placePlayer(); // Place the player 
@@ -44,17 +44,16 @@ function createGameBoard() {
         let center = getCenter(room);
         if (center != doorPosition && center[0] != player.posX && center[1] != player.y) { //Make sure we aren't spawning an entity on top of the door
             let newEnemy = new AddNPC('sheep', center[0], center[1]);
-            npcs.push(newEnemy);
         }
     }
 }
 function moveAll() {
-    for (let npc of npcs) {
+    for (let npc of allEnemies) {
         npc.moveNext(gameBoard);
     }
 }
 function setAllNextMove() {
-    for (let npc of npcs) {
+    for (let npc of allEnemies) {
         npc.setNextMove(gameBoard);
     }
 }
@@ -90,6 +89,8 @@ function displayMap(map) {
                 cell.innerHTML = `<img src="${floor}" alt="Floor">`;
             } else if (map[y][x] == wall) {
                 cell.innerHTML = `<img src="${wall}" alt="Wall">`;
+            }else if(map[y][x] == door){
+                cell.innerHTML = `<img src="${door}" alt="Wall">`;
             }
             else {
                 // For non-NPC cells, use textContent as before
@@ -277,6 +278,8 @@ function drawLine(x1, y1, x2, y2, color, lineWidth = 1) {
 function drawLineFromCell(posX, posY, endX, endY, color, lineWidth) {
     let startPos = getCellScreenPosition(posX, posY);
     let endPos = getCellScreenPosition(endX, endY);
+    console.log("\n");
+    console.log(`Start Pos - x: ${startPos.x}, y: ${startPos.y}`, ` End Pos - x: ${endPos.x}, y: ${endPos.y}`);
 
     // Adjust start position relative to the canvas if needed
     let canvasRect = canvas.getBoundingClientRect();
@@ -285,6 +288,8 @@ function drawLineFromCell(posX, posY, endX, endY, color, lineWidth) {
     endPos.x -= canvasRect.left + window.scrollX;
     endPos.y -= canvasRect.top + window.scrollY;
 
+
+    console.log(`Start Pos - x: ${startPos.x}, y: ${startPos.y}`, ` End Pos - x: ${endPos.x}, y: ${endPos.y}`);
     drawLine(startPos.x, startPos.y, endPos.x, endPos.y, color, lineWidth);
 }
 function getCellScreenPosition(posX, posY) {
